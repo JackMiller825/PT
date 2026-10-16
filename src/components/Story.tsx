@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { asset, configuredLinks, site, tickerLabel, type SiteLinkKey } from "../config";
 import { leadMascot } from "../mascots";
 import { chapters } from "../story";
@@ -169,10 +170,6 @@ export function Story() {
             <span>Ownership · {site.ownership}</span>
           </article>
         </div>
-        <p className="fine-note">
-          These are the project’s stated settings. Confirm the official contract and on-chain status before
-          making a decision; the scoreboard is not a substitute for verification.
-        </p>
       </section>
 
       <section className="playbook" id="playbook" aria-labelledby="play-title" data-reveal>
@@ -217,11 +214,6 @@ export function Story() {
             </p>
           </li>
         </ol>
-        <p className="caution">
-          <b>Keep your head in the game.</b> Never share your seed phrase or trust a direct message with a
-          “support” link. No contract address is published in this preview; wait for the official one and verify
-          it yourself.
-        </p>
       </section>
 
       <section className="timeout" aria-labelledby="timeout-title">
@@ -243,7 +235,6 @@ export function Story() {
             <p className="eyebrow">The Bureau of Calls · official-ish record</p>
             <h2 id="case-title">The case file</h2>
           </div>
-          <p className="case-kind">Fictional case record. These are story jokes, not project settings.</p>
         </div>
         <div className="case-grid">
           <article>
@@ -298,8 +289,8 @@ export function Story() {
             <span>Stories from fans</span>
           </div>
         </div>
-        <div className="fan-invite">
-          {links.length > 0 ? (
+        {links.length > 0 ? (
+          <div className="fan-invite">
             <ul>
               {links.map(([key, href]) => (
                 <li key={key}>
@@ -309,13 +300,8 @@ export function Story() {
                 </li>
               ))}
             </ul>
-          ) : (
-            <p>
-              The stands are open. Official channels are not posted yet, so nothing here is a working social
-              button or a form. When a real destination exists, it will be added in the site configuration.
-            </p>
-          )}
-        </div>
+          </div>
+        ) : null}
       </section>
 
       <section
@@ -348,11 +334,55 @@ export function Story() {
             <span>Courtside culture · stories from the stands</span>
           </p>
         </div>
-        <p className="disclaimer">
-          Independent fictional basketball-comedy project. Not affiliated with a professional athlete, team, or
-          league. Story characters are original.
-        </p>
+        <nav className="footer-social" aria-label="Community">
+          <CommunityLink href={site.links.x} label="X">
+            <XMark />
+          </CommunityLink>
+          <CommunityLink href={site.links.telegram} label="Telegram">
+            <TelegramMark />
+          </CommunityLink>
+        </nav>
       </footer>
     </>
+  );
+}
+
+function CommunityLink({
+  href,
+  label,
+  children,
+}: {
+  href: string;
+  label: string;
+  children: ReactNode;
+}) {
+  const destination = href.trim();
+  if (!destination) {
+    return (
+      <span className="social-link is-waiting" title="Coming soon" aria-label={`${label}, coming soon`}>
+        {children}
+      </span>
+    );
+  }
+  return (
+    <a className="social-link" href={destination} target="_blank" rel="noreferrer" aria-label={label}>
+      {children}
+    </a>
+  );
+}
+
+function XMark() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.727-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
+
+function TelegramMark() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M21.94 4.3 18.9 19.2c-.23 1.02-1.66 1.4-2.48.86l-5.46-4.02-2.63 2.54c-.31.3-.86.14-.96-.28l-.78-5.05L2.2 11.4c-1.05-.33-1.07-1.78.02-2.14L20.35 2.9c.9-.3 1.76.52 1.59 1.4zM8.9 13.7l9.2-5.66c.4-.25.76-.08.42.22l-7.9 7.12-.34 3.2-1.38-4.88z" />
+    </svg>
   );
 }
