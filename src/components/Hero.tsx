@@ -98,7 +98,7 @@ export function Hero({ live, onReplay }: { live: boolean; onReplay: () => void }
   );
 }
 
-const unpublishedCa = "Not published yet";
+const unpublishedCa = "Coming Soon..";
 
 function ContractCopy() {
   const address = site.contractAddress.trim();
@@ -155,7 +155,7 @@ function ContractCopy() {
               ? "Copy failed. Try again."
               : address
                 ? "Copy contract address"
-                : "Copy contract address. Not published yet."
+                : `Copy contract address. ${unpublishedCa}`
         }
       >
         {label}
