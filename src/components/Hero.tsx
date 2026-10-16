@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { asset, tickerLabel } from "../config";
+import { useEffect, useRef, useState } from "react";
+import { asset, site, tickerLabel } from "../config";
 import { replayOrder } from "../mascots";
 
 const scores = [
@@ -40,6 +40,7 @@ export function Hero({ live, onReplay }: { live: boolean; onReplay: () => void }
             One suspicious bounce. One fearless finger. One basketball with <b>way too much to say.</b> Read
             the completely unnecessary, wildly over-reviewed origin story.
           </p>
+          <ContractCopy />
           <div className="hero-actions">
             <a className="button" href="#chapter-1">
               READ THE LEGEND ↓
@@ -95,4 +96,99 @@ export function Hero({ live, onReplay }: { live: boolean; onReplay: () => void }
       </dl>
     </section>
   );
+}
+
+const unpublishedCa = "Not published yet";
+
+function ContractCopy() {
+  const address = site.contractAddress.trim();
+  const value = address || unpublishedCa;
+  const field = useRef<HTMLInputElement>(null);
+  const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle");
+
+  useEffect(() => {
+    if (status === "idle") return;
+    const timer = window.setTimeout(() => setStatus("idle"), 1800);
+    return () => window.clearTimeout(timer);
+  }, [status]);
+
+  function copy() {
+    const payload = value || unpublishedCa;
+    const pending = navigator.clipboard?.writeText(payload);
+    if (copyVisibleText(field.current, payload)) {
+      setStatus("copied");
+      return;
+    }
+    if (!pending) {
+      setStatus("failed");
+      return;
+    }
+    void pending.then(
+      () => setStatus("copied"),
+      () => setStatus("failed"),
+    );
+  }
+
+  const label = status === "copied" ? "Copied" : status === "failed" ? "Try again" : "Copy";
+
+  return (
+    <div className="ca-row">
+      <span className="ca-label">CA</span>
+      <input
+        ref={field}
+        className="ca-value"
+        readOnly
+        value={value}
+        title={value}
+        spellCheck={false}
+        aria-label="Contract address"
+        onFocus={(event) => event.currentTarget.select()}
+      />
+      <button
+        type="button"
+        className={status === "copied" ? "ca-copy is-copied" : "ca-copy"}
+        onClick={copy}
+        aria-label={
+          status === "copied"
+            ? `Copied ${value}`
+            : status === "failed"
+              ? "Copy failed. Try again."
+              : address
+                ? "Copy contract address"
+                : "Copy contract address. Not published yet."
+        }
+      >
+        {label}
+      </button>
+      <span className="sr-only" role="status">
+        {status === "copied" ? `Copied ${value}` : status === "failed" ? "Copy failed" : ""}
+      </span>
+    </div>
+  );
+}
+
+function copyVisibleText(field: HTMLInputElement | null, text: string) {
+  const target = field ?? document.createElement("textarea");
+  const temporary = target !== field;
+  if (temporary) {
+    target.value = text;
+    target.setAttribute("readonly", "");
+    target.style.position = "fixed";
+    target.style.top = "0";
+    target.style.left = "0";
+    document.body.appendChild(target);
+  }
+  const previous = document.activeElement;
+  target.focus({ preventScroll: true });
+  target.select();
+  target.setSelectionRange(0, text.length);
+  let copied = false;
+  try {
+    copied = document.execCommand("copy");
+  } catch {
+    copied = false;
+  }
+  if (temporary) target.remove();
+  else if (previous instanceof HTMLElement) previous.focus();
+  return copied;
 }
