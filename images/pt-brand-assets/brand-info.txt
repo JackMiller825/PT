@@ -1,0 +1,10 @@
+Name: PointTaken
+Ticker: $PT
+Narrative: A basketball pointing reaction meme that says “point taken” and calls out the moment.
+Visual direction: Watercolor editorial illustration; cream, midnight navy, coral red, muted turquoise, and gold accents.
+Character: Original fictionalized female basketball player in a pointing pose; no team or league marks.
+
+Files:
+- pt-logo-transparent.png — 1024 × 1024 circular logo with real alpha transparency outside the circle.
+- pt-banner-3to1.png — 1500 × 500 panoramic banner.
+- pt-banner-1100x520.png — 1100 × 520 Telegram banner.
