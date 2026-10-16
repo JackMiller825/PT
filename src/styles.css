@@ -835,13 +835,15 @@ h1, h2, h3 { font-family: var(--cond); text-transform: uppercase; letter-spacing
   font-size: 20px;
   letter-spacing: 0.06em;
 }
-.site-footer span { display: block; line-height: 1.55; }
+.site-footer p span { display: block; line-height: 1.55; }
 .footer-social { display: flex; align-items: center; gap: 12px; margin-left: auto; }
 .social-link {
   width: 52px;
   height: 52px;
   display: grid;
   place-items: center;
+  padding: 0;
+  line-height: 0;
   color: var(--gold);
   text-decoration: none;
   border-radius: 50%;
@@ -854,7 +856,7 @@ h1, h2, h3 { font-family: var(--cond); text-transform: uppercase; letter-spacing
     0 0 0 1px rgba(235, 195, 91, 0.35);
   transition: transform 0.2s ease, color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
-.social-link svg { width: 22px; height: 22px; fill: currentColor; }
+.social-link svg { display: block; width: 20px; height: 20px; fill: currentColor; }
 a.social-link:hover {
   color: var(--navy);
   background: var(--gold);
